@@ -1,0 +1,27 @@
+{
+  "name": "@enjoys/encrypt-decrypt",
+  "version": "1.0.0",
+  "description": "This is custom library alternative of JWT which is used to encrypt/decrypt data for security purposes",
+  "keywords": [
+    "encrypt",
+    "decrypt",
+    "jwt",
+    "encode",
+    "decode",
+    "security"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mullayam/encrypt-decrypt-npm-package-enjoys.git"
+  },
+  "author": "ENJOYS",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Mullayam/encrypt-decrypt-npm-package-enjoys/issues"
+  },
+  "homepage": "https://github.com/Mullayam/encrypt-decrypt-npm-package-enjoys#readme"
+}
