@@ -2,17 +2,19 @@
 Developer : `Mulayam`
 <br>
 Before implementing Please Provide A Secret Key in environment variable (.env File with name) if not this env variable not found then package will use default encryption key.
-#IN .ENV FILE
+<BR>
+IN .ENV FILE
+ <BR>
 `ENCRYPTION_KEY =  YOUR SECRET KEY` or also you can do this 
 <BR>
-# OR Manuall Pass of ENRCYPTION KEY
+# OR Manual Pass of ENRCYPTION KEY
 <BR>
 `const { ENCRYPTION_KEY } require('@enjoys/encrypt-decrypt')
 ENCRYPTION_KEY('YOUR SECRET KEY')
 `
 <BR>
-# Documentation
-# ENCRYPTION OF DATA
+#Documentation
+#ENCRYPTION OF DATA
  
 `const {MAKE} require('@enjoys/encrypt-decrypt')`  ES5 Syntax (CommonJS)
 <BR>
