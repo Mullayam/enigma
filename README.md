@@ -5,7 +5,7 @@ Before implementing Please Provide A Secret Key in environment variable (.env Fi
 <BR>
 IN .ENV FILE
  <BR>
-`ENCRYPTION_KEY =  YOUR SECRET KEY` or also you can do this 
+`ENCRYPTION_KEY = "YOUR SECRET KEY"` or also you can do this 
 <BR>
 # OR Manual Pass of ENRCYPTION KEY
 <BR>
@@ -14,6 +14,8 @@ ENCRYPTION_KEY('YOUR SECRET KEY')
 `
 <BR>
 #Documentation
+<BR>
+
 #ENCRYPTION OF DATA
  
 `const {MAKE} require('@enjoys/encrypt-decrypt')`  ES5 Syntax (CommonJS)
@@ -23,6 +25,7 @@ OR
 `import {MAKE} from('@enjoys/encrypt-decrypt')`  ES6 Syntax 
 <BR>
 `let NewObj= 'pass your data here' || {user:"demo",password:"12345678"`
+#
 <BR>
 `let EncryptedData  = MAKE(NewObj)`
 <BR>
