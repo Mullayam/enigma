@@ -5,25 +5,34 @@ Before implementing Please Provide A Secret Key in environment variable (.env Fi
 <BR>
 IN .ENV FILE
  <BR>
-`ENCRYPTION_KEY = "YOUR SECRET KEY"` or also you can do this 
+``` javascript
+ENCRYPTION_KEY = "YOUR SECRET KEY"
+```
+ 
 <BR> 
 #Documentation
 <BR>
 
 #ENCRYPTION OF DATA
  
-`const Zilch = require("zilich");`  ES5 Syntax (CommonJS)
+``` javascript 
+const Zilch = require("zilich");`  ES5 Syntax (CommonJS)
+```
 <BR>
 OR
 <BR>
-`import Zilch from('zilich')`  ES6 Syntax 
+ES6 Syntax 
+``` javascript  import Zilch from('zilich')
+```  
 <BR>
 ``` javascript 
 let NewObj= 'pass your data here' // { user:"demo",password:"12345678"} 
 ```
 #
 <BR>
-`let EncryptedData  = Zilich.encrypt(NewObj)`
+``` javascript  
+let EncryptedData  = Zilich.encrypt(NewObj)
+```
 <BR>
 This will return a encrypted/hash random generated string with your data and encryption key.<BR>
 `Output : 074e48c8e3c0bc19f9e22dd7570037392e5d0bf80cf9dd51bb7808872a511b3`
@@ -31,7 +40,13 @@ This will return a encrypted/hash random generated string with your data and enc
  
 # DECRYPTION OF DATA
 
-`let DecryptData  = '074e48c8e3c0bc19f9e22dd7570037392e5d0bf80cf9dd51bb7808872a511b3'`
+``` javascript 
+let DecryptData  = '074e48c8e3c0bc19f9e22dd7570037392e5d0bf80cf9dd51bb7808872a511b3'
+```
 <BR>
-Also can use Destructing Method `let {user,password} = Zilch.decrypt(DecryptData)`
+Also can use Destructing Method 
+```javascript 
+let {user,password} = Zilch.decrypt(DecryptData)
+console.log(user,password)
+```
 

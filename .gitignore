@@ -1,4 +1,6 @@
 node_modules
 app.js
+index.js
 tsconfig.json
 package-lock.json
+.gitignore
