@@ -1,5 +1,5 @@
 {
-  "name": "@enjoys/encrypt-decrypt",
+  "name": "zilch",
   "version": "1.0.0",
   "description": "This is custom library alternative of JWT which is used to encrypt/decrypt data for security purposes",
   "keywords": [
@@ -12,7 +12,8 @@
   ],
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc -p .",
+    "start": "tsc ./index.ts && node ./app.js"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/Mullayam/encrypt-decrypt-npm-package-enjoys/issues"
   },
-  "homepage": "https://github.com/Mullayam/encrypt-decrypt-npm-package-enjoys#readme"
+  "homepage": "https://github.com/Mullayam/encrypt-decrypt-npm-package-enjoys#readme",
+  "devDependencies": {
+    "@types/node": "^18.16.1"
+  }
 }
