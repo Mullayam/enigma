@@ -1,6 +1,6 @@
 {
-  "name": "zilch",
-  "version": "1.0.0",
+  "name": "zilch2",
+  "version": "1.0.1",
   "description": "This is custom library alternative of JWT which is used to encrypt/decrypt data for security purposes",
   "keywords": [
     "encrypt",
@@ -27,5 +27,8 @@
   "homepage": "https://github.com/Mullayam/encrypt-decrypt-npm-package-enjoys#readme",
   "devDependencies": {
     "@types/node": "^18.16.1"
+  },
+  "dependencies": {
+    "zilch2": "^1.0.0"
   }
 }

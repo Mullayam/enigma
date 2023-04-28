@@ -1,8 +1,11 @@
 import zcrypto = require("crypto");
 const ALGORITHM = "aes-256-cbc";
 const ENCODING = "hex";
-
-class Zilch {
+interface ZilchType {
+  encrypt(data: any): string;
+  decrypt(text: any): any;
+}
+class Zilch implements ZilchType {
   private ENCRYPTION_KEY: string =
     "enjoys_encrption_key!@#%^&*()_NJ" || process.env.ENCRYPTION_KEY;
   private IV_LENGTH = 16;
@@ -18,7 +21,7 @@ class Zilch {
     }
     return `${this.ENCRYPTION_KEY}`;
   }
-  encrypt(data: any) {
+  encrypt(data: any): string {
     const iv = zcrypto.randomBytes(this.IV_LENGTH);
     const cipher = zcrypto.createCipheriv(
       ALGORITHM,
