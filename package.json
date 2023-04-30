@@ -27,8 +27,5 @@
   "homepage": "https://github.com/Mullayam/encrypt-decrypt-npm-package-enjoys#readme",
   "devDependencies": {
     "@types/node": "^18.16.1"
-  },
-  "dependencies": {
-    "zilch2": "^1.0.0"
   }
 }
