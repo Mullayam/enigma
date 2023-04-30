@@ -1,6 +1,6 @@
 {
   "name": "zilch2",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "This is custom library alternative of JWT which is used to encrypt/decrypt data for security purposes",
   "keywords": [
     "encrypt",
