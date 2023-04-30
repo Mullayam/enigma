@@ -1,4 +1,4 @@
-import zcrypto = require("crypto");
+const zcrypto = require("crypto");
 const ALGORITHM = "aes-256-cbc";
 const ENCODING = "hex";
 interface ZilchType {
