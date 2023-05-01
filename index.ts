@@ -22,6 +22,9 @@ class Zilch implements ZilchType {
     return `${this.ENCRYPTION_KEY}`;
   }
   encrypt(data: any): string {
+    if (typeof data === "object") {
+      data = JSON.stringify(data);
+    }
     const iv = zcrypto.randomBytes(this.IV_LENGTH);
     const cipher = zcrypto.createCipheriv(
       ALGORITHM,
@@ -43,6 +46,7 @@ class Zilch implements ZilchType {
     );
     let decrypted = decipher.update(encryptedText);
     decrypted = Buffer.concat([decrypted, decipher.final()]);
+
     return decrypted.toString();
   }
 }
