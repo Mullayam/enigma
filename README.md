@@ -33,7 +33,7 @@ let DecryptData  = '074e48c8e3c0bc19f9e22dd7570037392e5d0bf80cf9dd51bb7808872a51
 ```
 Also can use Destructing Method 
 ```javascript 
-let {user,password} = Zilch.decrypt(DecryptData)
+let {user,password} = Zilch.decrypt(DecryptData) //JSON.parse(Zilch.decrypt(DecryptData))  if object/array is passed
 console.log(user,password)
 ```
 
