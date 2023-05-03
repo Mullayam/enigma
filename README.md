@@ -38,5 +38,11 @@ console.log(user,password)
 ```
 
 ### Note Before Version only 1.0.3 
-To encrypt object and any typeof object  use ```javascript Zilch.encrypt(JSON.stringify(NewObj))```
-To decrypt if object is passed use ```javascript JSON.parse(Zilch.decrypt(DecryptData))```
+To encrypt object and any typeof object  use 
+ ```javascript 
+ Zilch.encrypt(JSON.stringify(NewObj))
+ ```
+To decrypt if object is passed use 
+ ```javascript 
+ JSON.parse(Zilch.decrypt(DecryptData))
+ ```
