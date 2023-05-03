@@ -19,6 +19,7 @@ import Zilch from('zilch2')
 ``` javascript 
 const  NewObj = 'pass your data here' // { user:"demo",password:"12345678" } 
 ```
+
 ``` javascript  
 let EncryptedData  = Zilch.encrypt(NewObj)
 ```
@@ -36,3 +37,6 @@ let {user,password} = Zilch.decrypt(DecryptData)
 console.log(user,password)
 ```
 
+### Note Before Version only 1.0.3 
+To encrypt object and any typeof object  use ```javascript Zilch.encrypt(JSON.stringify(NewObj))```
+To decrypt if object is passed use ```javascript JSON.parse(Zilch.decrypt(DecryptData))```
