@@ -4,3 +4,5 @@ index.js
 tsconfig.json
 package-lock.json
 .gitignore
+dist
+build

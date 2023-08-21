@@ -1,7 +1,8 @@
 {
-  "name": "zilch2",
+  "name": "@enjoys/enigma",
   "version": "1.0.4",
   "description": "This is custom library alternative of JWT which is used to encrypt/decrypt data for security purposes",
+  "type": "module",
   "keywords": [
     "encrypt",
     "decrypt",
