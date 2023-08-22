@@ -1,5 +1,6 @@
 import { SentinelCipher } from './src/Cipher.js';
 import { Inscribe } from './src/Incribe.js'
+export * from "./src/interface.js"
 
 export namespace Enigma {
   export class EnigmaToken extends Inscribe.EncryptoJWT {}
