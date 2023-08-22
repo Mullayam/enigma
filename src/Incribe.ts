@@ -1,12 +1,9 @@
-import { EncryptaKeyHeaders, Options } from './interface.js'
+import { Options } from './interface.js'
 import { SecureToken } from './SecureToken.js';
 
 export namespace Inscribe {
 
     export class EncryptoJWT extends SecureToken {
-        constructor(protected SecretKey: string) {
-            super(SecretKey)
-        }
 
         /**
          * A method to add custom headers to the CryptoSeal object.
@@ -14,8 +11,8 @@ export namespace Inscribe {
          * @param {any} myheaders - The custom headers to be added.
          * @return {void} The updated CryptoSeal object.
          */
-        customHeader(myheaders: any): this {
-            this.CryptoSeal = { ...this.CryptoSeal, ...myheaders }
+        setHeader(myheaders: any): this {
+            this.CryptoSealHeaders = { ...this.CryptoSealHeaders, ...myheaders }
             return this
         }
         /**
@@ -26,15 +23,14 @@ export namespace Inscribe {
          * @param {number} [options.expiresIn=0] - The expiration time for the token in seconds.
          * @return {string} - The signed JWT token.
          */
-        safesign(payload: any, options: Options = { expiresIn: 0 }): string {
-            return `${this.CreateEncodedHeader()}.${this.CreateEncodedPayload({ payload, expiresIn: options.expiresIn })}.${this.CreateEncodedSignature(payload)}`;
+        safesign(payload: any, privateKey: string, options: Options = { expiresIn: 0 }): string {
+            return `${this.CreateEncodedHeader()}.${this.CreateEncodedPayload({ payload, expiresIn: options.expiresIn })}.${this.CreateEncodedSignature(payload, privateKey)}`;
         }
-        confirm(token: string):boolean {
+        confirm(token: string): boolean {
             return this.IsValidToken(token)
         }
-        decrypt(token: string):any {
-            return this.ParseTokenString(token)
-
+        decrypt(token: string, SecretKey: string): any {
+            return this.ParseTokenString(token, SecretKey)
         }
 
     }

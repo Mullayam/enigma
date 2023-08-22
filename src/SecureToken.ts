@@ -1,11 +1,13 @@
 import * as crypto from 'crypto'
-import { CreateEncodedPayloadType, EncryptaKeyHeaders } from "./interface.js";
+import { CreateEncodedPayloadType, EncryptaKeyHeadersType } from "./interface.js";
 
 export class SecureToken {
-    constructor(protected SecretKey: string) {
+    protected SecretKey: string = ""
+
+    protected EncryptionKey(SecretKey: string) {
         this.SecretKey = SecretKey
     }
-    protected CryptoSeal: EncryptaKeyHeaders = { alg: "HS256", typ: "JWT" }
+    protected CryptoSealHeaders: EncryptaKeyHeadersType = { alg: "HS256", typ: "JWT" }
     /**
      * Encodes the given data in base64 format.
      *
@@ -13,7 +15,7 @@ export class SecureToken {
      * @return {string} The encoded data in base64 format.
      */
     protected EncodeDataInBase64(data: any): string {
-        return Buffer.from(JSON.stringify(data)).toString('base64');
+        return Buffer.from(JSON.stringify(data)).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
     }
     /**
      * Replaces occurrences of '=' with '', '+' with '-', and '/' with '_' in the given string.
@@ -32,7 +34,7 @@ export class SecureToken {
      * @return {string} The encoded header.
      */
     protected CreateEncodedHeader(): string {
-        return this.FilterMyString(this.EncodeDataInBase64(this.CryptoSeal))
+        return this.EncodeDataInBase64(this.CryptoSealHeaders).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
     }
     /**
      * Creates an encoded payload using the provided data.
@@ -43,12 +45,14 @@ export class SecureToken {
      * @returns {string} - The encoded payload.
      */
     protected CreateEncodedPayload(data: { payload: any, expiresIn?: number }): string {
-        const VaultedToken = { ...data.payload, iat: new Date().getTime() } as CreateEncodedPayloadType
-
-        if (data.expiresIn !== 0) {
-            VaultedToken.expiresIn = new Date().getTime() + Number(data.expiresIn)
+        const VaultedToken = { ...data.payload, iss: "enigma", iat: Math.floor(Date.now() / 1000) } as CreateEncodedPayloadType
+        if (data.expiresIn === 0) {
+            console.log("2")
+            return this.EncodeDataInBase64(VaultedToken)
         }
-        return this.FilterMyString(this.EncodeDataInBase64(VaultedToken))
+        VaultedToken.expiresIn = new Date().getTime() + data.expiresIn!
+        return this.EncodeDataInBase64(VaultedToken)
+
     }
     /**
      * Generates an encoded signature for the given payload.
@@ -56,13 +60,23 @@ export class SecureToken {
      * @param {any} payload - The payload to create the signature for.
      * @return {string} The encoded signature.
      */
-    protected CreateEncodedSignature(payload: any): string {
-        const Signature = crypto
-            .createHmac("sha256", this.SecretKey)
-            .update(`${this.CreateEncodedHeader()}.${this.CreateEncodedPayload(payload)}`)
-            .digest("base64")
-
-        return this.FilterMyString(Signature)
+    protected CreateEncodedSignature(payload: any, privateKey: string): string {
+        try {
+            if (!privateKey) {
+                throw new Error('No Private Key')
+            }
+            if (privateKey === "") {
+                throw new Error('Private Key cannot be a Empty String')
+            }
+            const EnCodedHeaderString = this.CreateEncodedHeader()
+            const EnCodedPayloadString = this.CreateEncodedPayload(payload)
+            const CipherToken = `${EnCodedHeaderString}.${EnCodedPayloadString}`
+            const Signature = crypto.createHmac('sha256', privateKey)
+            const EncryptedToken = Signature.update(CipherToken).digest("base64").replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
+            return EncryptedToken
+        } catch (error: any) {
+            return error.message
+        }
     }
     /**
      * Validates the format of a JWT token.
@@ -112,32 +126,65 @@ export class SecureToken {
             return false
         }
     }
-    private VerifySignature(data: { payload: any, header: string }, signature: string) {
+    /**
+     * Creates a new signature based on the provided data and secret key.
+     *
+     * @param {Object} data - The payload and header for the signature.
+     * @param {string} SecretKey - The secret key used for encryption.
+     * @return {string} The calculated signature.
+     */
+    private CreateNewSignature(data: { payload: any, header: string }, SecretKey: string): string {
+        const CipherToken = `${data.header}.${data.payload}`
         const calculatedSignature = crypto
-            .createHmac('sha256', this.SecretKey)
-            .update(`${data.header}.${data.payload}`)
+            .createHmac('sha256', SecretKey)
+            .update(CipherToken)
             .digest('base64')
-            .replace(/\+/g, '-')
-            .replace(/\//g, '_')
-            .replace(/=/g, '');
-
-        return calculatedSignature === signature;
+            .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')        
+        return calculatedSignature;
 
     }
-    protected ParseTokenString(TokenStr: string): any {
+    protected ParseTokenString(TokenStr: string, SecretKey: string): any {
         try {
+            if (!SecretKey) {
+                throw new Error('Verify Token requires Secret Key')
+            }
             this.IsValidToken(TokenStr)
             const parts = TokenStr.split('.');
-            const payload = JSON.parse(this.DecodeBase64String(parts[1]));
-            const header = JSON.parse(this.DecodeBase64String(parts[0]));
-            const signature = parts[2];
-            if (!this.VerifySignature({ payload: JSON.stringify(payload), header: JSON.stringify(header) }, signature)) {
-                throw new Error('Invalid Signature')
-            }
-            return payload
+            const header = parts[0];           
+            const payload = parts[1];
+            const signature = this.CreateNewSignature({header, payload }, SecretKey)            
+            return this.VerifySignature(header,payload,signature,SecretKey)
         } catch (error: any) {
             return `${error.message}`
         }
     }
+    /**
+     * Decodes a base64 URL string.
+     *
+     * @param {string} input - The base64 URL string to decode.
+     * @return {string} The decoded string in UTF-8 format.
+     */
+    protected base64UrlDecode(input: string): string {
+        const base64 = input.replace(/-/g, '+').replace(/_/g, '/');
+        const buffer = Buffer.from(base64, 'base64');
+        return buffer.toString('utf-8');
+    }
 
+    /**
+     * Verify the signature of a JWT token.
+     *
+     * @param {string} jwtToken - The JWT token to verify.
+     * @param {string} secretKey - The secret key used to sign the JWT token.
+     * @return {CreateEncodedPayloadType | string} - The decoded payload of the JWT token if the signature is valid, 
+     *                           otherwise returns "Invalid Signature".
+     */
+    protected VerifySignature(headerB64:string, payloadB64:string, signature:string, secretKey: string): CreateEncodedPayloadType | string {        
+        const hmac = crypto.createHmac('sha256', secretKey);
+        hmac.update(`${headerB64}.${payloadB64}`);       
+        const calculatedSignature = hmac.digest('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+        if (calculatedSignature === signature) {
+            return JSON.parse(this.DecodeBase64String(payloadB64));
+        }
+        return "Invalid Signature";
+    }
 }
