@@ -1,4 +1,4 @@
-import { Options } from './interface.js'
+import { EncryptaKeyHeadersType, Options } from './interface.js'
 import { SecureToken } from './SecureToken.js';
 
 export namespace Inscribe {
@@ -14,6 +14,13 @@ export namespace Inscribe {
         setHeader(myheaders: any): this {
             this.CryptoSealHeaders = { ...this.CryptoSealHeaders, ...myheaders }
             return this
+        }
+        getHeader(tokenString: string, name: string = ""): EncryptaKeyHeadersType | keyof EncryptaKeyHeadersType {
+            if (name !== "" && !name) {
+                const headerData = this.getDataByParts(tokenString)
+                return headerData[name as keyof typeof headerData]
+            }
+            return this.getDataByParts(tokenString)
         }
         /**
          * Generates a signed JWT token based on the given payload and options.

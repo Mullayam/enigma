@@ -158,6 +158,10 @@ export class SecureToken {
             return `${error.message}`
         }
     }
+    protected getDataByParts(TokenStr: string): EncryptaKeyHeadersType {
+        const header = TokenStr.split('.')[0];            
+        return JSON.parse(this.base64UrlDecode(header));
+    }
     /**
      * Decodes a base64 URL string.
      *
