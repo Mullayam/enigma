@@ -16,7 +16,7 @@ export namespace Inscribe {
             return this
         }
         getHeader(tokenString: string, name: string = ""): EncryptaKeyHeadersType | keyof EncryptaKeyHeadersType {
-            if (name !== "" && !name) {
+            if (name !== "" && name) {
                 const headerData = this.getDataByParts(tokenString)
                 return headerData[name as keyof typeof headerData]
             }
