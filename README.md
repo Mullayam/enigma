@@ -81,13 +81,14 @@ If you decrypt the token on JWT.io(jwt.tio), the `Header` part contains followin
 }
 
 ```
-## Get Token  Headers
+## Get Token Headers
 ```javascript
 const enigma = new Enigma.EnigmaToken();
 const SecretKey = "JwtSecretKey__!@#%^&*()_NJ";
 const Encryptedtoken ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsIm5hbWUiOiJtdWxsYXlhbSJ9.eyJ0ZXN0IjoidGVzdCIsImlzcyI6ImVuaWdtYSIsImlhdCI6MTY5MjY5MzEyNCwiZXhwaXJlc0luIjoxNjkyNjkzMTI1NTM4fQ"
 const tokenHeaders = enigma.getHeader(Encryptedtoken, SecretKey ); 
-console.log(alg)
+// const {alg,type} = enigma.getHeader(Encryptedtoken, SecretKey ); 
+console.log(tokenHeaders.alg)
 ```
 Output Will be:
 ```bash
