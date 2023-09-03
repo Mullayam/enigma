@@ -33,9 +33,31 @@ export namespace Inscribe {
         safesign(payload: any, privateKey: string, options: Options = { expiresIn: 0 }): string {
             return `${this.CreateEncodedHeader()}.${this.CreateEncodedPayload({ payload, expiresIn: options.expiresIn })}.${this.CreateEncodedSignature(payload, privateKey)}`;
         }
+        /**
+         * Confirm the validity of a token.
+         *
+         * @param {string} token - The token to be confirmed.
+         * @return {boolean} Returns true if the token is valid, otherwise false.
+         */
         confirm(token: string): boolean {
             return this.IsValidToken(token)
         }
+        /**
+         * Decodes a given token and returns the decrypted string or object.
+         *
+         * @param {string} token - The token to be decoded.
+         * @return {string | Record<string, any>} - The decrypted string or object.
+         */
+        decode(token: string): string | Record<string, any> {
+            return this.decryptStringToData(token)
+        }
+        /**
+         * Decrypts a token using the provided secret key.
+         *
+         * @param {string} token - The token to be decrypted.
+         * @param {string} SecretKey - The secret key used for decryption.
+         * @return {any} The decrypted token.
+         */
         decrypt(token: string, SecretKey: string): any {
             return this.ParseTokenString(token, SecretKey)
         }

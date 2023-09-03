@@ -139,7 +139,7 @@ export class SecureToken {
             .createHmac('sha256', SecretKey)
             .update(CipherToken)
             .digest('base64')
-            .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')        
+            .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
         return calculatedSignature;
 
     }
@@ -150,16 +150,16 @@ export class SecureToken {
             }
             this.IsValidToken(TokenStr)
             const parts = TokenStr.split('.');
-            const header = parts[0];           
+            const header = parts[0];
             const payload = parts[1];
-            const signature = this.CreateNewSignature({header, payload }, SecretKey)            
-            return this.VerifySignature(header,payload,signature,SecretKey)
+            const signature = this.CreateNewSignature({ header, payload }, SecretKey)
+            return this.VerifySignature(header, payload, signature, SecretKey)
         } catch (error: any) {
             return `${error.message}`
         }
     }
     protected getDataByParts(TokenStr: string): EncryptaKeyHeadersType {
-        const header = TokenStr.split('.')[0];            
+        const header = TokenStr.split('.')[0];
         return JSON.parse(this.base64UrlDecode(header));
     }
     /**
@@ -173,7 +173,16 @@ export class SecureToken {
         const buffer = Buffer.from(base64, 'base64');
         return buffer.toString('utf-8');
     }
+    protected decryptStringToData(TokenStr: string) {
+        this.IsValidToken(TokenStr)
+        const payload = TokenStr.split('.')[1]
+        if (this.CheckJSON(payload)) {
+            return JSON.parse(this.DecodeBase64String(payload))
+        } else {
+            return { error: "Token is Malformed" }
+        }
 
+    }
     /**
      * Verify the signature of a JWT token.
      *
@@ -182,9 +191,9 @@ export class SecureToken {
      * @return {CreateEncodedPayloadType | string} - The decoded payload of the JWT token if the signature is valid, 
      *                           otherwise returns "Invalid Signature".
      */
-    protected VerifySignature(headerB64:string, payloadB64:string, signature:string, secretKey: string): CreateEncodedPayloadType | string {        
+    protected VerifySignature(headerB64: string, payloadB64: string, signature: string, secretKey: string): CreateEncodedPayloadType | string {
         const hmac = crypto.createHmac('sha256', secretKey);
-        hmac.update(`${headerB64}.${payloadB64}`);       
+        hmac.update(`${headerB64}.${payloadB64}`);
         const calculatedSignature = hmac.digest('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
         if (calculatedSignature === signature) {
             return JSON.parse(this.DecodeBase64String(payloadB64));
